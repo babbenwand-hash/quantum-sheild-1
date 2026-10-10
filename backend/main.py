@@ -13,14 +13,14 @@ from sklearn.svm import SVC
 from sklearn.metrics import precision_score, recall_score, f1_score, average_precision_score, roc_auc_score
 
 app = FastAPI(title="QuantumShield API", version="1.0")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("FRONTEND_ORIGINS", "*").split(","),
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 DATA = Path(os.getenv("DATA_PATH", Path(__file__).parent / "data" / "creditcard.csv"))
 models = {}
 benchmark = []
