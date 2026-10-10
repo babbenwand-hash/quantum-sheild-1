@@ -216,7 +216,7 @@ function App() {
             >
               {transactions.map(x => (
                 <option key={x.transaction_id} value={x.transaction_id}>
-                  {x.transaction_id} — {x.user_id} — ₹{x.amount} ({x.risk_level})
+                  {x.transaction_id} — {x.user_id} — ₹{x.amount}
                 </option>
               ))}
             </select>
