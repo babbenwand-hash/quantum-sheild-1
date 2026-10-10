@@ -55,13 +55,13 @@ body {
 .top-nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .top-nav-item {
   color: #94a3b8;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 6px;
@@ -76,15 +76,6 @@ body {
 
 .top-nav-item.active {
   border-bottom: 2px solid #6366f1;
-}
-
-/* Main Container */
-main {
-  flex: 1;
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 32px 24px;
 }
 
 .status-badge {
@@ -107,6 +98,70 @@ main {
   box-shadow: 0 0 8px #10b981;
 }
 
+/* Main Container */
+main {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Judge Presentation Banner */
+.judge-demo-bar {
+  background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
+}
+
+.judge-demo-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.judge-demo-title span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #c084fc;
+}
+
+.judge-btn-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-sim {
+  background-color: #2e104d;
+  color: #e9d5ff;
+  border: 1px solid #7e22ce;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-sim:hover {
+  background-color: #6b21a8;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+}
+
 /* Transaction Selector Box */
 .selector-card {
   background-color: #111827;
@@ -118,14 +173,13 @@ main {
 }
 
 .selector-label {
-  display: block;
+  display: inline-block;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: #818cf8;
   background: #1e1b4b;
-  display: inline-block;
   padding: 4px 10px;
   border-radius: 4px;
   margin-bottom: 12px;
@@ -303,6 +357,90 @@ main {
   line-height: 1.6;
 }
 
+/* Quantum Circuit Diagram */
+.circuit-card {
+  background-color: #0b0f19;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.circuit-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #818cf8;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qubit-wire {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.qubit-label {
+  width: 40px;
+  color: #a5b4fc;
+}
+
+.gate-box {
+  background-color: #1e1b4b;
+  border: 1px solid #6366f1;
+  color: #e0e7ff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.gate-box.cx {
+  background-color: #4c1d95;
+  border-color: #a855f7;
+  color: #f3e8ff;
+}
+
+.wire-line {
+  flex: 1;
+  height: 2px;
+  background-color: #334155;
+  position: relative;
+}
+
+/* Model Comparison Battle */
+.battle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.battle-card {
+  background-color: #0b0f19;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.battle-card.qsvm {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.battle-card-header {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
 /* Risk Signal Breakdown Table */
 .breakdown-title {
   font-family: 'Space Grotesk', sans-serif;
@@ -355,10 +493,6 @@ main {
   border-bottom: 1px solid #1e293b;
 }
 
-.bench-item:last-child {
-  border-bottom: none;
-}
-
 .bench-name {
   font-weight: 700;
   font-size: 14px;
@@ -378,31 +512,18 @@ main {
   color: #94a3b8;
 }
 
-/* Network Nodes */
-.node-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+/* SVG Network Canvas */
+.svg-network-container {
+  width: 100%;
+  height: 320px;
+  background-color: #0b0f19;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
   margin-top: 14px;
+  position: relative;
+  overflow: hidden;
 }
 
-.node-chip {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #e2e8f0;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-family: 'Fira Code', monospace;
-  font-size: 11px;
-}
-
-.node-chip.user {
-  border-color: #6366f1;
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-}
-
-/* Footer */
 footer {
   text-align: center;
   padding: 24px;
@@ -413,18 +534,17 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .battle-grid {
+    grid-template-columns: 1fr;
+  }
   .top-navbar {
     padding: 0 16px;
   }
   .top-nav-links {
-    gap: 12px;
+    gap: 10px;
     font-size: 11px;
   }
   main {
-    padding: 20px 14px;
-  }
-  .signals-table td {
-    padding: 10px;
-    font-size: 12px;
+    padding: 16px 12px;
   }
 }

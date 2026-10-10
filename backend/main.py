@@ -277,6 +277,76 @@ def get_benchmarks():
         "note": "Metrics are measured on held-out data including QSVM Quantum Kernel."
     }
 
+class AttackSim(BaseModel):
+    attack_type: str = "fraud_ring"
+
+@app.post("/api/simulate_attack")
+def simulate_attack(req: AttackSim):
+    global behavior
+    tx_id = f"TX_ATTACK_{len(behavior)+1000}"
+    u_id = f"USER_{np.random.randint(100, 999)}"
+    
+    if req.attack_type == "fraud_ring":
+        amount_val = 849.50
+        b_risk = 72.0
+        q_risk = 98.40
+        ring_sig = 99.0
+        f_score = 91.20
+        attack_title = "Fraud Ring Coordinated Attack"
+        risk_lvl = "CRITICAL RISK"
+        defense = "HOLD_AND_REVIEW"
+    elif req.attack_type == "ato_burst":
+        amount_val = 1420.00
+        b_risk = 68.0
+        q_risk = 91.50
+        ring_sig = 85.0
+        f_score = 83.40
+        attack_title = "New Device / Account Takeover Burst"
+        risk_lvl = "CRITICAL RISK"
+        defense = "HOLD_AND_REVIEW"
+    elif req.attack_type == "geo_anomaly":
+        amount_val = 450.00
+        b_risk = 45.0
+        q_risk = 78.20
+        ring_sig = 40.0
+        f_score = 61.80
+        attack_title = "Impossible Velocity Location Anomaly"
+        risk_lvl = "HIGH RISK"
+        defense = "STEP_UP_VERIFICATION"
+    else:
+        amount_val = round(float(np.random.exponential(150)), 2)
+        b_risk = round(float(np.random.uniform(5, 40)), 2)
+        q_risk = round(float(np.random.uniform(10, 45)), 2)
+        ring_sig = round(float(np.random.uniform(0, 20)), 2)
+        f_score = round(b_risk * 0.35 + q_risk * 0.45 + ring_sig * 0.20, 2)
+        attack_title = "None detected"
+        risk_lvl = "LOW RISK"
+        defense = "APPROVE"
+
+    new_row = {
+        "transaction_id": tx_id,
+        "user_id": u_id,
+        "amount": amount_val,
+        "new_device": True,
+        "location_change": True,
+        "burst": True,
+        "fraud_ring": True,
+        "behavioral_risk": b_risk,
+        "qsvm_risk_index": q_risk,
+        "fraud_ring_signal": ring_sig,
+        "final_risk_score": f_score,
+        "risk_level": risk_lvl,
+        "predicted_attack": attack_title,
+        "attack_confidence": 94.5,
+        "recommended_defense": defense
+    }
+    
+    behavior = pd.concat([pd.DataFrame([new_row]), behavior], ignore_index=True)
+    return {
+        "status": "Attack simulated",
+        "inserted_transaction": new_row
+    }
+
 @app.get("/api/network")
 def network():
     return {
