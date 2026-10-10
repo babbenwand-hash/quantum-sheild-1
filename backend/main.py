@@ -31,7 +31,7 @@ def init():
  if len(X)>30000:
   X,_,y,_=train_test_split(X,y,test_size=1-30000/len(X),random_state=42,stratify=y)
  xt,xv,yt,yv=train_test_split(X,y,test_size=.25,random_state=42,stratify=y)
- for name,m in [("Logistic Regression",make_pipeline(StandardScaler(),LogisticRegression(class_weight="balanced",max_iter=1000))),("Random Forest",RandomForestClassifier(n_estimators=100,class_weight="balanced",random_state=42,n_jobs=-1)),("Classical SVM",make_pipeline(StandardScaler(),SVC(class_weight="balanced",probability=True))) ]:
+ for name,m in [("Logistic Regression",make_pipeline(StandardScaler(),LogisticRegression(class_weight="balanced",max_iter=1000))),("Random Forest",RandomForestClassifier(n_estimators=100,class_weight="balanced",random_state=42,n_jobs=1)),("Classical SVM",make_pipeline(StandardScaler(),SVC(class_weight="balanced",probability=True))) ]:
   m.fit(xt,yt); s=m.predict_proba(xv)[:,1]; p=m.predict(xv)
   benchmark.append({"model":name,"precision":round(float(precision_score(yv,p,zero_division=0)),3),"recall":round(float(recall_score(yv,p,zero_division=0)),3),"f1":round(float(f1_score(yv,p,zero_division=0)),3),"pr_auc":round(float(average_precision_score(yv,s)),3),"roc_auc":round(float(roc_auc_score(yv,s)),3)})
   models[name]=m
