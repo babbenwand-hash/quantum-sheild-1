@@ -358,7 +358,7 @@ function App() {
                   Risk Index: <strong style={{ color: '#818cf8' }}>{analysis.transaction.qsvm_risk_index}/100 (Quantum Detected)</strong>
                 </div>
                 <p style={{ fontSize: '12px', color: '#94a3b8' }}>
-                  $ZZ\text{FeatureMap}$ encodes complex interaction phases $|\psi(x)\rangle$, accurately identifying coordinated fraud rings.
+                  ZZFeatureMap encodes complex interaction phases |ψ(x)⟩, accurately identifying coordinated fraud rings.
                 </p>
               </div>
             </div>
@@ -372,7 +372,7 @@ function App() {
               ⚛️ ZZFeatureMap 4-Qubit Quantum Kernel Circuit
             </h2>
             <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '20px' }}>
-              Maps transaction risk features $(V_{14}, V_{4}, V_{10}, \text{Amount})$ into 16-dimensional quantum statevectors $|\psi\rangle$ for non-linear hyperplane separation.
+              Maps transaction risk features (V14, V4, V10, Amount) into 16-dimensional quantum statevectors |ψ⟩ for non-linear hyperplane separation.
             </p>
 
             <div className="circuit-card">
@@ -628,7 +628,7 @@ function App() {
             <h3 className="breakdown-title">Core Innovation</h3>
             <p style={{ color: '#cbd5e1', fontSize: '13px', lineHeight: '1.7', marginBottom: '16px' }}>
               Traditional payment gateways rely on 2D linear rule engines that miss complex multi-user behavioral entanglement.
-              <strong>QuantumShield</strong> leverages a <strong>$ZZ\text{FeatureMap}$ Quantum Kernel (QSVM)</strong> to map non-linear transaction vectors into a 16-dimensional Hilbert space, detecting coordinated fraud rings with <strong>92.9% F1 Score</strong> and ultra-low 12ms latency.
+              <strong>QuantumShield</strong> leverages a <strong>ZZFeatureMap Quantum Kernel (QSVM)</strong> to map non-linear transaction vectors into a 16-dimensional Hilbert space, detecting coordinated fraud rings with <strong>92.9% F1 Score</strong> and ultra-low 12ms latency.
             </p>
           </section>
         )}
