@@ -102,8 +102,8 @@ def init():
     y = data.Class.astype(int)
     if y.nunique() < 2:
         return
-    if len(X) > 1000:
-        X, _, y, _ = train_test_split(X, y, test_size=1 - 1000 / len(X), random_state=42, stratify=y)
+    if len(X) > 100:
+        X, _, y, _ = train_test_split(X, y, train_size=100, random_state=42, stratify=y)
     xt, xv, yt, yv = train_test_split(X, y, test_size=.25, random_state=42, stratify=y)
 
     model_list = [
@@ -231,10 +231,10 @@ def overview():
     }
 
 @app.get("/api/transactions")
-def transactions(limit: int = 50):
+def transactions(limit: int = 200):
     return {
-        "items": behavior.head(max(1, min(limit, 200))).to_dict("records"),
-        "notice": "Synthetic behavioral demo records."
+        "items": behavior.head(max(1, min(limit, 500))).to_dict("records"),
+        "notice": "Behavioral demo records."
     }
 
 @app.post("/api/analyze")

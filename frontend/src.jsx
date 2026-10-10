@@ -37,7 +37,7 @@ function App() {
     try {
       let res = await Promise.all([
         fetch(API + '/api/overview'),
-        fetch(API + '/api/transactions'),
+        fetch(API + '/api/transactions?limit=200'),
         fetch(API + '/api/benchmarks'),
         fetch(API + '/api/network'),
         fetch(API + '/api/health')
