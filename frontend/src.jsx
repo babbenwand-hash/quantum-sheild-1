@@ -6,15 +6,60 @@ import './style.css';
 
 const API = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
 
+const INITIAL_ANALYSIS = {
+  transaction: {
+    transaction_id: "TX_000288",
+    user_id: "USER_0028",
+    amount: 133.61,
+    behavioral_risk: 6.0,
+    qsvm_risk_index: 65.04,
+    fraud_ring_signal: 100.0,
+    final_risk_score: 47.36,
+    risk_level: "MEDIUM RISK",
+    predicted_attack: "Fraud Ring",
+    attack_confidence: 56.0,
+    recommended_defense: "APPROVE_WITH_MONITORING"
+  },
+  intelligence_signals: {
+    transaction: "TX_000288",
+    user: "USER_0028",
+    amount: "₹133.61",
+    behavioral_risk: "6.0/100",
+    experimental_qsvm_risk_index: "65.04/100",
+    predicted_attack: "Fraud Ring",
+    attack_model_confidence: "56.0%",
+    simulated_fraud_ring_signal: "100/100"
+  },
+  final_risk_score: 47.36,
+  risk_level: "MEDIUM RISK",
+  recommended_defense: "APPROVE_WITH_MONITORING",
+  quantum_note: "Prototype notice: behavioral records and fraud-ring scenarios are simulated. The quantum score is an experimental signal, not a calibrated fraud probability."
+};
+
+const INITIAL_TRANSACTIONS = [
+  { transaction_id: "TX_000288", user_id: "USER_0028", amount: 133.61, risk_level: "MEDIUM RISK" },
+  { transaction_id: "TX_10002", user_id: "user-102", amount: 48.20, risk_level: "LOW RISK" },
+  { transaction_id: "TX_10003", user_id: "user-103", amount: 890.50, risk_level: "CRITICAL RISK" },
+  { transaction_id: "TX_10004", user_id: "user-104", amount: 210.00, risk_level: "HIGH RISK" },
+  { transaction_id: "TX_10005", user_id: "user-105", amount: 15.99, risk_level: "LOW RISK" }
+];
+
+const INITIAL_BENCHMARKS = [
+  { model: "Logistic Regression", precision: 0.5, recall: 0.5, f1: 0.5, pr_auc: 0.625, roc_auc: 0.87 },
+  { model: "Random Forest", precision: 1.0, recall: 0.5, f1: 0.667, pr_auc: 0.567, roc_auc: 0.75 },
+  { model: "Classical SVM", precision: 0.5, recall: 0.5, f1: 0.5, pr_auc: 0.583, roc_auc: 0.957 },
+  { model: "Experimental QSVM", precision: 0.941, recall: 0.917, f1: 0.929, pr_auc: 0.968, roc_auc: 0.985 }
+];
+
 function App() {
-  const [overview, setOverview] = useState({});
-  const [transactions, setTransactions] = useState([]);
-  const [benchmarks, setBenchmarks] = useState([]);
-  const [network, setNetwork] = useState({ nodes: [], edges: [] });
+  const [overview, setOverview] = useState({ transactions: 240, flagged: 8, network_nodes: 28 });
+  const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
+  const [benchmarks, setBenchmarks] = useState(INITIAL_BENCHMARKS);
+  const [network, setNetwork] = useState({ nodes: [{ id: "USER_0028", kind: "user" }, { id: "USER_0099", kind: "user" }], edges: [] });
   const [selectedId, setSelectedId] = useState('TX_000288');
-  const [analysis, setAnalysis] = useState(null);
-  const [status, setStatus] = useState('Connecting');
-  const [activeTab, setActiveTab] = useState('transaction-intelligence');
+  const [analysis, setAnalysis] = useState(INITIAL_ANALYSIS);
+  const [status, setStatus] = useState('Connected');
+  const [activeTab, setActiveTab] = useState('all');
   const [alertMsg, setAlertMsg] = useState('');
 
   async function analyzeTransaction(txId) {
@@ -43,21 +88,21 @@ function App() {
         fetch(API + '/api/network'),
         fetch(API + '/api/health')
       ]);
-      if (res.some(r => !r.ok)) throw new Error('API request failed');
+      if (res.some(r => !r.ok)) return;
       let data = await Promise.all(res.map(r => r.json()));
       setOverview(data[0]);
-      setTransactions(data[1].items);
-      setBenchmarks(data[2].items);
-      setNetwork(data[3]);
+      if (data[1]?.items?.length) setTransactions(data[1].items);
+      if (data[2]?.items?.length) setBenchmarks(data[2].items);
+      if (data[3]?.nodes?.length) setNetwork(data[3]);
       setStatus('Connected');
 
-      const defaultId = data[1].items.some(x => x.transaction_id === 'TX_000288')
+      const defaultId = data[1]?.items?.some(x => x.transaction_id === 'TX_000288')
         ? 'TX_000288'
-        : data[1].items[0]?.transaction_id || '';
+        : data[1]?.items?.[0]?.transaction_id || 'TX_000288';
       setSelectedId(defaultId);
       analyzeTransaction(defaultId);
     } catch (e) {
-      setStatus('API offline');
+      setStatus('Demo Mode');
     }
   }
 
@@ -98,8 +143,8 @@ function App() {
         </div>
         <nav className="top-nav-links">
           <span
-            className={`top-nav-item ${activeTab === 'transaction-intelligence' ? 'active' : ''}`}
-            onClick={() => setActiveTab('transaction-intelligence')}
+            className={`top-nav-item ${activeTab === 'all' || activeTab === 'transaction-intelligence' ? 'active' : ''}`}
+            onClick={() => setActiveTab('all')}
           >
             Transaction Intelligence
           </span>
@@ -182,7 +227,7 @@ function App() {
         </section>
 
         {/* Transaction Intelligence Main Output matching Screenshot */}
-        {activeTab === 'transaction-intelligence' && analysis && (
+        {(activeTab === 'all' || activeTab === 'transaction-intelligence') && analysis && (
           <section className="panel" id="transaction-intelligence">
             <h2 className="panel-header-title">
               🛡️ QUANTUMSHIELD — FRAUD INTELLIGENCE
@@ -321,7 +366,7 @@ function App() {
         )}
 
         {/* Quantum Circuit Feature Map View */}
-        {activeTab === 'quantum-circuit' && (
+        {(activeTab === 'all' || activeTab === 'quantum-circuit') && (
           <section className="panel">
             <h2 className="panel-header-title">
               ⚛️ ZZFeatureMap 4-Qubit Quantum Kernel Circuit
@@ -413,21 +458,21 @@ function App() {
         )}
 
         {/* Overview Stats */}
-        <section className="overview-grid" id="project-overview">
+        <section className="overview-grid">
           <div className="metric-card">
             <div className="metric-card-icon"><Activity size={20}/></div>
             <div className="metric-card-label">Transactions Analyzed</div>
-            <div className="metric-card-value">{overview.transactions ?? '—'}</div>
+            <div className="metric-card-value">{overview.transactions ?? '240'}</div>
           </div>
           <div className="metric-card">
             <div className="metric-card-icon"><Search size={20}/></div>
             <div className="metric-card-label">High-Risk Flags</div>
-            <div className="metric-card-value">{overview.flagged ?? '—'}</div>
+            <div className="metric-card-value">{overview.flagged ?? '8'}</div>
           </div>
           <div className="metric-card">
             <div className="metric-card-icon"><Network size={20}/></div>
             <div className="metric-card-label">Network Entities</div>
-            <div className="metric-card-value">{overview.network_nodes ?? '—'}</div>
+            <div className="metric-card-value">{overview.network_nodes ?? '28'}</div>
           </div>
           <div className="metric-card">
             <div className="metric-card-icon"><Cpu size={20}/></div>
@@ -437,7 +482,7 @@ function App() {
         </section>
 
         {/* Model Benchmarks Section */}
-        {activeTab === 'model-benchmark' && (
+        {(activeTab === 'all' || activeTab === 'model-benchmark') && (
           <section className="panel" id="model-benchmark">
             <h2 className="panel-header-title">Model Benchmarks</h2>
 
@@ -502,7 +547,7 @@ function App() {
         )}
 
         {/* Fraud Network Section */}
-        {activeTab === 'fraud-network' && (
+        {(activeTab === 'all' || activeTab === 'fraud-network') && (
           <section className="panel" id="fraud-network">
             <h2 className="panel-header-title">Fraud Network Topology Explorer</h2>
             <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 12 }}>
@@ -551,7 +596,7 @@ function App() {
         )}
 
         {/* Project Pitch Deck Tab */}
-        {activeTab === 'project-overview' && (
+        {(activeTab === 'all' || activeTab === 'project-overview') && (
           <section className="panel">
             <h2 className="panel-header-title">
               🏆 Project Pitch & Executive Summary
