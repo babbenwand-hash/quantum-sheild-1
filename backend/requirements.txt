@@ -1,0 +1,1 @@
+fastapi>=0.115,<1\nuvicorn[standard]>=0.30\npandas>=2.0\nnumpy>=1.26\nscikit-learn>=1.4\nnetworkx>=3.2\n
